@@ -1,6 +1,7 @@
 <?php
 
 include_once( 'model/articles.php' );
+include_once( 'model/categories.php' );
 
 $fields	= ['title' => '', 'content' => ''];
 $err	= '';

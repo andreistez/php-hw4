@@ -4,10 +4,7 @@ include_once( 'db.php' );
 
 function getAllArticles() : array
 {
-	$sql	= "SELECT * FROM articles ORDER BY date_created DESC";
-	$query	= dbQuery( $sql );
-
-	return $query->fetchAll();
+	return dbQuery( "SELECT * FROM articles ORDER BY date_created DESC" )->fetchAll();
 }
 
 function addArticle( array $fields, array $categories = [] ): bool
@@ -29,28 +26,28 @@ function addArticle( array $fields, array $categories = [] ): bool
 	return true;
 }
 
-function getCategoriesList(): array
-{
-	$sql	= "SELECT id, name FROM categories ORDER BY name";
-	$query	= dbQuery( $sql );
+function getArticle( int $article_id ){
+	if( ! $article_id ) return null;
 
-	return $query->fetchAll();
+	return dbQuery( "SELECT * FROM articles WHERE id=$article_id" )->fetch();
 }
 
-function getArticleCategories( int $article_id ): array
+function editArticle( int $article_id, array $fields ): bool
 {
-	$sql = "
-		SELECT categories.name
-		FROM articles_categories
-			JOIN categories
-			ON category_id=categories.id
-		WHERE article_id=$article_id
-		ORDER BY categories.name
-	";
-	$cats = dbQuery( $sql )->fetchAll();
+	dbQuery( "UPDATE articles SET title='{$fields['title']}', content='{$fields['content']}' WHERE id=$article_id" );
+	dbQuery( "DELETE FROM articles_categories WHERE article_id=$article_id" );
 
-	if( empty( $cats ) ) return [];
+	if( ! empty( $fields['cats'] ) ){
+		foreach( $fields['cats'] as $cat )
+			dbQuery(
+				"INSERT INTO articles_categories VALUES (:article_id, :category_id)",
+				[
+					'article_id'	=> $article_id,
+					'category_id'	=> $cat
+				]
+			);
+	}
 
-	return array_map( fn( $item ) => $item['name'], $cats );
+	return true;
 }
 

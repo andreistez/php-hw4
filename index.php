@@ -1,6 +1,7 @@
 <?php
 
 include_once( 'model/articles.php' );
+include_once( 'model/categories.php' );
 
 $articles = getAllArticles();
 ?>
@@ -11,9 +12,9 @@ $articles = getAllArticles();
 <div>
 	<?php foreach( $articles as $article ): ?>
 		<div>
-			<strong><?=$article['title']?></strong>
+			<a href="edit.php?id=<?=$article['id']?>"><strong><?=$article['title']?></strong></a>
 			<em><?=$article['date_created']?></em>
-			<h4>In categories: <?=implode( ', ', getArticleCategories( $article['id'] ) )?></h4>
+			<h4>In categories: <?=implode( ', ', getArticleCategoriesField( $article['id'], 'name' ) )?></h4>
 			<div>
 				<?=$article['title']?>
 			</div>
