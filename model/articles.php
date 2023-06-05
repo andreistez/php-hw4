@@ -30,24 +30,24 @@ function getArticle( int $article_id ): ?array
 {
 	if( ! $article_id ) return null;
 
-	$article = dbQuery( "SELECT * FROM articles WHERE id=$article_id" )->fetch();
+	$article = dbQuery( "SELECT * FROM articles WHERE id=:id", ['id' => $article_id] )->fetch();
 
 	return is_array( $article ) ? $article : null;
 }
 
 function editArticle( int $article_id, array $fields ): bool
 {
-	dbQuery( "UPDATE articles SET title='{$fields['title']}', content='{$fields['content']}' WHERE id=$article_id" );
-	dbQuery( "DELETE FROM articles_categories WHERE article_id=$article_id" );
+	dbQuery(
+		"UPDATE articles SET title=:title, content=:content WHERE id=:id",
+		['title' => $fields['title'], 'content' => $fields['content'], 'id' => $article_id]
+	);
+	dbQuery( "DELETE FROM articles_categories WHERE article_id=:id", ['id' => $article_id] );
 
 	if( ! empty( $fields['cats'] ) ){
 		foreach( $fields['cats'] as $cat )
 			dbQuery(
 				"INSERT INTO articles_categories VALUES (:article_id, :category_id)",
-				[
-					'article_id'	=> $article_id,
-					'category_id'	=> $cat
-				]
+				['article_id' => $article_id, 'category_id' => $cat]
 			);
 	}
 
