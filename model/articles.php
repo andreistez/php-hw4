@@ -26,10 +26,13 @@ function addArticle( array $fields, array $categories = [] ): bool
 	return true;
 }
 
-function getArticle( int $article_id ){
+function getArticle( int $article_id ): ?array
+{
 	if( ! $article_id ) return null;
 
-	return dbQuery( "SELECT * FROM articles WHERE id=$article_id" )->fetch();
+	$article = dbQuery( "SELECT * FROM articles WHERE id=$article_id" )->fetch();
+
+	return is_array( $article ) ? $article : null;
 }
 
 function editArticle( int $article_id, array $fields ): bool
