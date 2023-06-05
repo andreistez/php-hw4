@@ -3,6 +3,9 @@
 require_once 'functions.php';
 require_once 'model/articles.php';
 require_once 'model/categories.php';
+include_once( 'model/logs.php' );
+
+writeLog();
 
 $id		= trim( $_GET['id'] );
 $err	= '';
@@ -30,5 +33,6 @@ if( ! $article = getArticle( $id ) ){
 
 <hr>
 <a href="edit.php?id=<?=$id?>">EDIT</a><br />
+<a href="delete.php?id=<?=$id?>">DELETE</a><br />
 <a href="index.php">Move to main page</a>
 

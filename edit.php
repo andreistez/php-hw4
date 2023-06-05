@@ -3,6 +3,9 @@
 include_once( 'model/articles.php' );
 include_once( 'model/categories.php' );
 include_once( 'functions.php' );
+include_once( 'model/logs.php' );
+
+writeLog();
 
 $fields 	= [];
 $success	= false;

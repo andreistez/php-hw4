@@ -54,3 +54,13 @@ function editArticle( int $article_id, array $fields ): bool
 	return true;
 }
 
+function deleteArticle( int $id ): bool
+{
+	if( ! $id ) return false;
+
+	dbQuery( "DELETE FROM articles WHERE id=:id", ['id' => $id] );
+	dbQuery( "DELETE FROM articles_categories WHERE article_id=:id", ['id' => $id] );
+
+	return true;
+}
+
