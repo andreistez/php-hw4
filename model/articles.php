@@ -7,7 +7,7 @@ function getAllArticles() : array
 	return dbQuery( "SELECT * FROM articles ORDER BY date_created DESC" )->fetchAll();
 }
 
-function addArticle( array $fields, array $categories = [] ): bool
+function addArticle( array $fields, array $categories = [] ): ?int
 {
 	dbQuery( "INSERT INTO articles (title, content) VALUES (:title, :content)", $fields );
 	$article_id = dbInstance()->lastInsertId();
@@ -23,7 +23,7 @@ function addArticle( array $fields, array $categories = [] ): bool
 			);
 	}
 
-	return true;
+	return $article_id;
 }
 
 function getArticle( int $article_id ): ?array

@@ -1,5 +1,6 @@
 <?php
 
+include_once( 'model/db.php' );
 include_once( 'model/articles.php' );
 include_once( 'model/categories.php' );
 include_once( 'model/logs.php' );
@@ -17,8 +18,8 @@ if( $_SERVER['REQUEST_METHOD'] === 'POST' ){
 	if( $fields['title'] === '' || $fields['content'] === '' ){
 		$err = 'Заполните все поля!';
 	}	else{
-		addArticle( $fields, $categories );
-		header( 'Location: index.php' );
+		$article_id = addArticle( $fields, $categories );
+		header( 'Location: article.php?id=' . $article_id );
 	}
 }
 ?>
